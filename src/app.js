@@ -153,7 +153,17 @@ const gracefulShutdown = (signal) => {
     setTimeout(() => {
         console.error('Forced shutdown due to timeout');
         process.exit(1);
+    server.close(() => {
+        console.log('HTTP server closed');
+        process.exit(0);
+    });
+
+    // Force exit after timeout
+    const forceExit = setTimeout(() => {
+        console.error('Forced shutdown due to timeout');
+        process.exit(1);
     }, 30000);
+    forceExit.unref();
 };
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
