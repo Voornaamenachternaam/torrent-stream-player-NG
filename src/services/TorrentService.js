@@ -57,7 +57,7 @@ class TorrentService {
             this.client.add(magnetURI, { 
                 path: config.downloadPath,
                 // Security: disable DHT in production if needed
-                announce: config.isProduction ? [] : undefined
+                announce: process.env.NODE_ENV === 'production' ? [] : undefined
             }, (newTorrent) => {
                 clearTimeout(timeoutId);
                 torrent = newTorrent;
