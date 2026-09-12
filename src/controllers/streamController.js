@@ -25,7 +25,7 @@ export async function handleStream(req, res) {
     }
     
     // Validate fileIndex is a valid number
-    const index = parseInt(fileIndex, 10);
+    const index = /^\d+$/.test(fileIndex) ? parseInt(fileIndex, 10) : NaN;
     if (isNaN(index) || index < 0 || index > 10000) {
         console.warn('Invalid file index:', fileIndex);
         return res.status(400).json({ error: 'Invalid file index' });
