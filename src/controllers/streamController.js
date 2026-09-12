@@ -19,6 +19,7 @@ export async function handleStream(req, res) {
     const { infoHash, fileIndex } = req.params;
     
     // Validate infoHash format
+    // Validate infoHash format (normalize to lowercase for lookup)
     if (!infoHash || !isValidInfoHash(infoHash)) {
         console.warn('Invalid info hash format:', infoHash);
         return res.status(400).json({ error: 'Invalid torrent info hash' });
