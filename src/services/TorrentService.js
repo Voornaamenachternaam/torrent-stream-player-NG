@@ -191,8 +191,9 @@ class TorrentService {
             }
         }, 1000);
 
-        // Store interval ID for potential cleanup
-        torrent._progressInterval = intervalId;
+        socket.on('disconnect', () => {
+            clearInterval(intervalId);
+        });
     }
 }
 
