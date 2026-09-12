@@ -30,7 +30,7 @@ app.use(express.static(config.publicPath, {
     maxAge: '1d',
     etag: true,
     lastModified: true,
-    fallthrough: false,
+    fallthrough: true,
     setHeaders: (res, path) => {
         // Disable caching for HTML files
         if (path.endsWith('.html')) {
