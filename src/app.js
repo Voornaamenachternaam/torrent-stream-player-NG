@@ -170,7 +170,26 @@ const gracefulShutdown = (signal) => {
         process.exit(1);
 let shuttingDown = false;
 let shuttingDown = false;
+let shuttingDown = false;
 const gracefulShutdown = (signal) => {
+    if (shuttingDown) return;
+    shuttingDown = true;
+    console.log(`\n${signal} received. Starting graceful shutdown...`);
+
+    const forceExit = setTimeout(() => {
+        console.error('Forced shutdown due to timeout');
+        process.exit(1);
+    }, 30000);
+    forceExit.unref();
+
+    io.close(() => {
+        server.close(() => {
+            torrentService.destroy();
+            clearTimeout(forceExit);
+            process.exit(0);
+        });
+    });
+};
     if (shuttingDown) return;
     shuttingDown = true;
     console.log(`\n${signal} received. Starting graceful shutdown...`);
