@@ -34,6 +34,10 @@ const torrent = torrentService.getTorrent(normalizedHash);
     }
     const normalizedHash = infoHash.toLowerCase();
 
+    if (!isValidInfoHash(infoHash)) {
+        console.warn('Invalid info hash format:', infoHash);
+        return res.status(400).json({ error: 'Invalid torrent info hash' });
+    }
     const normalizedHash = infoHash.toLowerCase();
     
     // Validate fileIndex is a valid number
