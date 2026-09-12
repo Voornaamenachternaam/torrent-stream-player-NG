@@ -18,26 +18,12 @@ function isValidInfoHash(infoHash) {
 export async function handleStream(req, res) {
     const { infoHash, fileIndex } = req.params;
     
-    // Validate infoHash format
-    // Validate infoHash format (normalize to lowercase for lookup)
-const normalizedHash = infoHash.toLowerCase();
-const torrent = torrentService.getTorrent(normalizedHash);
-        console.warn('Invalid info hash format:', infoHash);
-        return res.status(400).json({ error: 'Invalid torrent info hash' });
-    if (!isValidInfoHash(infoHash)) {
-        console.warn('Invalid info hash format:', infoHash);
-        return res.status(400).json({ error: 'Invalid torrent info hash' });
     // Validate infoHash format (normalize to lowercase for lookup)
     if (!isValidInfoHash(infoHash)) {
         console.warn('Invalid info hash format:', infoHash);
         return res.status(400).json({ error: 'Invalid torrent info hash' });
     }
-    const normalizedHash = infoHash.toLowerCase();
-
-    if (!isValidInfoHash(infoHash)) {
-        console.warn('Invalid info hash format:', infoHash);
-        return res.status(400).json({ error: 'Invalid torrent info hash' });
-    }
+    
     const normalizedHash = infoHash.toLowerCase();
     
     // Validate fileIndex is a valid number
@@ -50,7 +36,7 @@ const torrent = torrentService.getTorrent(normalizedHash);
     console.log('Stream request:', { infoHash, fileIndex: index });
     
     try {
-        const torrent = torrentService.getTorrent(infoHash);
+        const torrent = torrentService.getTorrent(normalizedHash);
         
         if (!torrent) {
             console.warn('Torrent not found:', infoHash);
@@ -86,9 +72,6 @@ const torrent = torrentService.getTorrent(normalizedHash);
             if (!res.writableEnded) {
                 res.end();
             }
-            return;
-        }
-            // Error already handled in setupStream
             return;
         }
 

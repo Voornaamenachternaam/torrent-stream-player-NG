@@ -133,49 +133,13 @@ app.use((err, req, res, next) => {
 });
 
 // Graceful shutdown
-const gracefulShutdown = (signal) => {
-    console.log(`\n${signal} received. Starting graceful shutdown...`);
-    
-    // Stop accepting new connections
-    server.close(() => {
-        console.log('HTTP server closed');
-    });
-    
-    // Close all Socket.IO connections
-    io.close(() => {
-        console.log('Socket.IO connections closed');
-    });
-    
-    // Destroy WebTorrent client
-    torrentService.destroy();
-    
-    // Force exit after timeout
-    setTimeout(() => {
-        console.error('Forced shutdown due to timeout');
-        process.exit(1);
-    server.close(() => {
-        console.log('HTTP server closed');
-        process.exit(0);
-    });
-
-    // Force exit after timeout
-    // Force exit after timeout
-    const forceExit = setTimeout(() => {
-        console.error('Forced shutdown due to timeout');
-        process.exit(1);
-    }, 30000);
-    forceExit.unref();
-};
-        console.error('Forced shutdown due to timeout');
-        process.exit(1);
-let shuttingDown = false;
-let shuttingDown = false;
 let shuttingDown = false;
 const gracefulShutdown = (signal) => {
     if (shuttingDown) return;
     shuttingDown = true;
+    
     console.log(`\n${signal} received. Starting graceful shutdown...`);
-
+    
     const forceExit = setTimeout(() => {
         console.error('Forced shutdown due to timeout');
         process.exit(1);
@@ -189,44 +153,6 @@ const gracefulShutdown = (signal) => {
             process.exit(0);
         });
     });
-};
-    if (shuttingDown) return;
-    shuttingDown = true;
-    console.log(`\n${signal} received. Starting graceful shutdown...`);
-
-    const forceExit = setTimeout(() => {
-        console.error('Forced shutdown due to timeout');
-        process.exit(1);
-    }, 30000);
-    forceExit.unref();
-
-    io.close(() => {
-        server.close(() => {
-            torrentService.destroy();
-            clearTimeout(forceExit);
-            process.exit(0);
-        });
-    });
-};
-    if (shuttingDown) return;
-    shuttingDown = true;
-    console.log(`\n${signal} received. Starting graceful shutdown...`);
-
-    const forceExit = setTimeout(() => {
-        console.error('Forced shutdown due to timeout');
-        process.exit(1);
-    }, 30000);
-    forceExit.unref();
-
-    io.close(() => {
-        server.close(() => {
-            torrentService.destroy();
-            clearTimeout(forceExit);
-            process.exit(0);
-        });
-    });
-};
-    forceExit.unref();
 };
 
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));

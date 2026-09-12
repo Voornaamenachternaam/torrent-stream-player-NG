@@ -103,7 +103,7 @@ export function parseRangeHeader(range, fileSize) {
  * @param {File} file - The torrent file object
  * @param {string} range - The range header value
  * @param {Response} res - The HTTP response object
- * @returns {ReadableStream} - The file stream
+ * @returns {ReadableStream|null} - The file stream or null on error
  */
 export function setupStream(file, range, res) {
     if (!file || !file.name) {
@@ -148,7 +148,7 @@ function setupFullStream(file, contentType, res) {
  * @param {string} range - The range header value
  * @param {string} contentType - The MIME type
  * @param {Response} res - The HTTP response object
- * @returns {ReadableStream} - The file stream
+ * @returns {ReadableStream|null} - The file stream or null on error
  */
 function setupRangeStream(file, range, contentType, res) {
     const parsedRange = parseRangeHeader(range, file.length);
@@ -163,12 +163,11 @@ function setupRangeStream(file, range, contentType, res) {
     }
     
     const { start, end } = parsedRange;
-    const chunksize = (end - start) + 1;
 
     const head = {
         'Content-Range': `bytes ${start}-${end}/${file.length}`,
         'Accept-Ranges': 'bytes',
-        'Content-Length': String(chunksize),
+        'Content-Length': String((end - start) + 1),
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=31536000'
     };
@@ -180,8 +179,6 @@ function setupRangeStream(file, range, contentType, res) {
         stream.on('error', (error) => handleStreamError(error, res));
         return stream;
     } catch (error) {
-        handleStreamError(error, res);
-    } catch (error) {
         console.error('Failed to create read stream:', error);
         if (!res.headersSent) {
             handleStreamError(error, res);
@@ -189,6 +186,5 @@ function setupRangeStream(file, range, contentType, res) {
             res.end();
         }
         return null;
-    }
     }
 }
