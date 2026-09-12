@@ -19,7 +19,11 @@ export const config = {
     // Security settings
     allowedOrigins: process.env.ALLOWED_ORIGINS 
         ? process.env.ALLOWED_ORIGINS.split(',') 
-        : (isProduction ? [] : [`http://${process.env.HOST || 'localhost'}:${parseInt(process.env.PORT, 10) || 3000}`]),
+    allowedOrigins: (() => {
+        if (process.env.ALLOWED_ORIGINS) return process.env.ALLOWED_ORIGINS.split(',');
+        if (isProduction) throw new Error('ALLOWED_ORIGINS must be set in production');
+        return [`http://${process.env.HOST || 'localhost'}:${parseInt(process.env.PORT, 10) || 3000}`];
+    })(),
     maxConnectionsPerIp: parseInt(process.env.MAX_CONNECTIONS_PER_IP, 10) || 5,
     
     // Rate limiting
