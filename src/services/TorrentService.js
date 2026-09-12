@@ -244,7 +244,9 @@ try {
             this.client.add(magnetURI, { 
                 path: config.downloadPath,
                 // Security: disable DHT in production if needed
+            this.client.add(magnetURI, {
                 path: config.downloadPath
+            }, (newTorrent) => {
             }, (newTorrent) => {
                 clearTimeout(timeoutId);
                 torrent = newTorrent;
