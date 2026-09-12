@@ -1,6 +1,6 @@
 {
   "name": "torrent-stream-player",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A modern web application for streaming media content directly from torrent magnet links",
   "type": "module",
   "main": "src/app.js",
@@ -19,15 +19,15 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "webtorrent": "^2.1.32"
+    "express": "^5.2.1",
+    "socket.io": "^4.8.3",
+    "webtorrent": "^3.0.21"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.1.14"
   },
   "engines": {
-    "node": ">=18.0.0",
-    "npm": ">=8.0.0"
+    "node": ">=24.21.0",
+    "npm": ">=12.0.2"
   }
 }
