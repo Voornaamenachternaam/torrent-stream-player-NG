@@ -130,7 +130,35 @@ const timeoutId = setTimeout(() => {
             console.error('Torrent addition timed out');
             socket.emit('error', 'Failed to load torrent: timeout');
             const pending = this.client.get(magnetURI);
+        let timedOut = false;
+        const timeoutId = setTimeout(() => {
+            timedOut = true;
+            console.error('Torrent addition timed out');
+            socket.emit('error', 'Failed to load torrent: timeout');
+            const pending = this.client.get(magnetURI);
             if (pending) {
+                this.client.remove(pending, () => {});
+            }
+        }, config.torrentTimeout);
+
+        try {
+            this.client.add(magnetURI, { path: config.downloadPath }, (newTorrent) => {
+                clearTimeout(timeoutId);
+                if (timedOut) {
+                    this.client.remove(newTorrent, () => {});
+                    return;
+                }
+                this.activeTorrents.set(newTorrent.infoHash, newTorrent);
+                this.torrentMetadata.set(newTorrent.infoHash, { addedAt: Date.now(), socketId: socket.id, magnetURI });
+                this._prioritizeVideoFiles(newTorrent);
+                this._sendTorrentInfo(socket, newTorrent);
+                this._setupErrorHandling(newTorrent, socket);
+            });
+        } catch (error) {
+            clearTimeout(timeoutId);
+            console.error('Failed to add torrent:', error);
+            socket.emit('error', 'Failed to add torrent');
+        }
                 this.client.remove(pending, () => {});
             }
         }, config.torrentTimeout);
