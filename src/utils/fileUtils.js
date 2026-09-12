@@ -181,6 +181,14 @@ function setupRangeStream(file, range, contentType, res) {
         return stream;
     } catch (error) {
         handleStreamError(error, res);
+    } catch (error) {
+        console.error('Failed to create read stream:', error);
+        if (!res.headersSent) {
+            handleStreamError(error, res);
+        } else {
+            res.end();
+        }
         return null;
+    }
     }
 }
