@@ -46,7 +46,17 @@ class TorrentService {
         // Add new torrent with timeout
         let timedOut = false;
         // Add new torrent with timeout
+        // Add new torrent with timeout
+        let timedOut = false;
         const timeoutId = setTimeout(() => {
+            timedOut = true;
+            console.error('Torrent addition timed out');
+            socket.emit('error', 'Failed to load torrent: timeout');
+            const pending = this.client.get(magnetURI);
+            if (pending) {
+                this.client.remove(pending, () => {});
+            }
+        }, config.torrentTimeout);
             timedOut = true;
             console.error('Torrent addition timed out');
             socket.emit('error', 'Failed to load torrent: timeout');
