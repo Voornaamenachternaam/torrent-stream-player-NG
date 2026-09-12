@@ -159,7 +159,13 @@ const gracefulShutdown = (signal) => {
     });
 
     // Force exit after timeout
+    // Force exit after timeout
     const forceExit = setTimeout(() => {
+        console.error('Forced shutdown due to timeout');
+        process.exit(1);
+    }, 30000);
+    forceExit.unref();
+};
         console.error('Forced shutdown due to timeout');
         process.exit(1);
 let shuttingDown = false;
