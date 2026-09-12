@@ -73,16 +73,3 @@ htmlcov/
 # Temporary files
 *.tmp
 *~
-```
-
-Wait, let me reconsider. The input shows only JavaScript source files being modified, not any build artifacts or temporary files. Let me check again:
-
-Added: []
-Deleted: []
-Modified: ['src/app.js', 'src/config/config.js', 'src/controllers/streamController.js', 'src/services/TorrentService.js', 'src/utils/fileUtils.js']
-
-These are all source files, no build artifacts or temporary files detected.
-
-```
-
-```
