@@ -27,7 +27,12 @@ const torrent = torrentService.getTorrent(normalizedHash);
     if (!isValidInfoHash(infoHash)) {
         console.warn('Invalid info hash format:', infoHash);
         return res.status(400).json({ error: 'Invalid torrent info hash' });
+    // Validate infoHash format (normalize to lowercase for lookup)
+    if (!isValidInfoHash(infoHash)) {
+        console.warn('Invalid info hash format:', infoHash);
+        return res.status(400).json({ error: 'Invalid torrent info hash' });
     }
+    const normalizedHash = infoHash.toLowerCase();
 
     const normalizedHash = infoHash.toLowerCase();
     
