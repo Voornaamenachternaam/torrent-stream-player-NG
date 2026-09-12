@@ -73,6 +73,12 @@ const torrent = torrentService.getTorrent(normalizedHash);
         const stream = setupStream(file, req.headers.range, res);
 
         if (!stream) {
+            // setupStream already wrote a terminal response (416/5xx); ensure it is ended
+            if (!res.writableEnded) {
+                res.end();
+            }
+            return;
+        }
             // Error already handled in setupStream
             return;
         }
