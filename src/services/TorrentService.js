@@ -187,10 +187,7 @@ class TorrentService {
 
             if (torrent.progress === 1) {
                 clearInterval(intervalId);
-                socket.emit('torrent-done', {
-                    infoHash: torrent.infoHash,
-                    name: torrent.name
-                });
+                socket.emit('torrent-done', torrent.infoHash);
             }
         }, 1000);
 
