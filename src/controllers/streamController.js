@@ -24,7 +24,12 @@ const normalizedHash = infoHash.toLowerCase();
 const torrent = torrentService.getTorrent(normalizedHash);
         console.warn('Invalid info hash format:', infoHash);
         return res.status(400).json({ error: 'Invalid torrent info hash' });
+    if (!isValidInfoHash(infoHash)) {
+        console.warn('Invalid info hash format:', infoHash);
+        return res.status(400).json({ error: 'Invalid torrent info hash' });
     }
+
+    const normalizedHash = infoHash.toLowerCase();
     
     // Validate fileIndex is a valid number
     const index = /^\d+$/.test(fileIndex) ? parseInt(fileIndex, 10) : NaN;
